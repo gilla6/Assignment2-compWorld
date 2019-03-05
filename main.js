@@ -88,10 +88,9 @@ function Species(game) {
     this.left = false;
     this.up = false;
     this.down = false;
-    this.sliding = false;
+    this.size = 1.2;
     this.radius = 20;
     this.id = 1;
-    this.survive = 0;
     Entity.call(this, game, 4 + (Math.random() * 750) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -173,20 +172,14 @@ Species.prototype.update = function () {
             temp = this.down;
             this.down = ent.down;
             ent.down = temp;
-                if(this.id != ent.id && ent.survive == 0){
+                if(this.id != ent.id && ent.size < this.size){
                     ent.removeFromWorld = true;
                 } else if (ent.id == 6){
-                    this.survive = 1;
+                    
+                    this.size = this.size * 1.25;
+                    this.radius = this.radius * 1.25;
                     ent.removeFromWorld = true;
                 }
-                     
-
-
-                // }//else{
-
-                    // this.velcocity = this.velocity * 2;
-                    // ent.velocity = ent.velocity * 2;
-                 //};
            
 
 
@@ -210,31 +203,30 @@ Species.prototype.update = function () {
 
 Species.prototype.draw = function (ctx) {
     if (this.left) {
-        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
-         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.up){
-           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     else {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
 };
 
 function SpeciesTwo(game) {
-   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 190, 45, 45, 0.25, 3, true, false);
-    this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 240, 45, 45, 0.25, 3, true, false);
+   this.animation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 200, 45, 45, 0.25, 3, true, false);
+    this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 245, 45, 45, 0.25, 3, true, false);
     this.rightAnimation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 290, 45, 45, 0.25, 3, true, false);
     this.upAnimation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 2, 340, 45, 45, 0.25, 3, true, false);
     this.left = false;
     this.up = false;
     this.down = false;
+     this.size = 1.2;
     this.jumping = false;
-    this.sliding = false;
     this.radius = 20;
     this.id = 2;
-    this.survive = 0;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -315,10 +307,12 @@ SpeciesTwo.prototype.update = function () {
             temp = this.down;
             this.down = ent.down;
             ent.down = temp;
-           if(this.id != ent.id && ent.survive == 0){
+           if(this.id != ent.id && ent.size < this.size){
                     ent.removeFromWorld = true;
                 } else if (ent.id == 6){
-                    this.survive = 1;
+                    
+                    this.size = this.size * 1.25;
+                    this.radius = this.radius * 1.25;
                     ent.removeFromWorld = true;
                 }
 
@@ -360,14 +354,14 @@ SpeciesTwo.prototype.update = function () {
 
 SpeciesTwo.prototype.draw = function (ctx) {
      if (this.left) {
-        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
-         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.up){
-           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     else {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
 };
@@ -380,10 +374,9 @@ function SpeciesThree(game) {
     this.left = false;
     this.up = false;
     this.down = false;
-    this.sliding = false;
+     this.size = 1.2;
     this.radius = 20;
     this.id = 3;
-    this.survive = 0;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -464,10 +457,12 @@ SpeciesThree.prototype.update = function () {
             temp = this.down;
             this.down = ent.down;
             ent.down = temp;
-            if(this.id != ent.id && ent.survive == 0){
+            if(this.id != ent.id && ent.size < this.size){
                     ent.removeFromWorld = true;
                 } else if (ent.id == 6){
-                    this.survive = 1;
+                    
+                    this.size = this.size * 1.25;
+                    this.radius = this.radius * 1.25;
                     ent.removeFromWorld = true;
                 }
 
@@ -508,14 +503,14 @@ SpeciesThree.prototype.update = function () {
 
 SpeciesThree.prototype.draw = function (ctx) {
      if (this.left) {
-        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
-         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.up){
-           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     else {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
 };
@@ -528,10 +523,9 @@ function SpeciesFour(game) {
     this.left = false;
     this.up = false;
     this.down = false;
-    this.sliding = false;
+     this.size = 1.2;
     this.radius = 20;
     this.id = 4;
-    this.survive = 0;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -612,10 +606,12 @@ SpeciesFour.prototype.update = function () {
             temp = this.down;
             this.down = ent.down;
             ent.down = temp;
-           if(this.id != ent.id && ent.survive == 0){
+           if(this.id != ent.id && ent.size < this.size){
                     ent.removeFromWorld = true;
                 } else if (ent.id == 6){
-                    this.survive = 1;
+                    
+                    this.size = this.size * 1.25;
+                    this.radius = this.radius * 1.25;
                     ent.removeFromWorld = true;
                 }
 
@@ -656,14 +652,14 @@ SpeciesFour.prototype.update = function () {
 
 SpeciesFour.prototype.draw = function (ctx) {
      if (this.left) {
-        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
-         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+         this.rightAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.up){
-           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+           this.upAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     else {
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.2);
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
 };
@@ -671,13 +667,8 @@ SpeciesFour.prototype.draw = function (ctx) {
 
 function Food(game) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/food.png"), 300, 150, 30, 16, 0.5, 1, true, false);
-    // this.jumpAnimation = new Animation(ASSET_MANAGER.getAsset("./img/LastSurvivor.png"), 1536, 512 , 256, 256, 0.06, 7, false, false);
-    //  this.slideAnimation = new Animation(ASSET_MANAGER.getAsset("./img/LastSurvivor.png"), 0, 1280 , 256, 256, 0.06, 8, false, false);
-    this.jumping = false;
-    this.sliding = false;
     this.radius = 10;
     this.id = 6;
-    this.survive = 1;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -721,27 +712,15 @@ Food.prototype.update = function () {
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
         if (this != ent && this.collide(ent)) {
-            // var temp = this.velocity;
-            // this.velocity = ent.velocity;
-            // ent.velocity = temp;
              
             if(this.id != ent.id){
             this.removeFromWorld = true;
              ent.survive = 1;
          }
-            
-           // var spec = new Species(this.gameEngine);
-           // this.game.addEntity(this);
-
-           // this.game.start();
 
 
         };
     };
-
-   
-      // this.x =  4 + (Math.random() * 800) + 1;
-      // this.y = 4 + (Math.random() * 700) + 1;
   console.log(this.game.clockTick);
    
 
@@ -765,9 +744,8 @@ var maxSpeed = 2000;
 
 var ASSET_MANAGER = new AssetManager();
 
-//ASSET_MANAGER.queueDownload("./img/LastSurvivor.png");
+
 ASSET_MANAGER.queueDownload("./img/background.jpeg");
-//ASSET_MANAGER.queueDownload("./img/platform.png");
 ASSET_MANAGER.queueDownload("./img/species.png");
 ASSET_MANAGER.queueDownload("./img/food.png");
 
@@ -786,8 +764,7 @@ ASSET_MANAGER.downloadAll(function () {
     var spec = new Species(gameEngine);
     gameEngine.addEntity(spec);
 
-    // var plat = new Platform(gameEngine);
-    // gameEngine.addEntity(plat);
+    
     for (var i = 0; i < 15; i++) {
         spec = new Species(gameEngine);
         gameEngine.addEntity(spec);
@@ -818,7 +795,7 @@ ASSET_MANAGER.downloadAll(function () {
 
     var food = new Food(gameEngine);
     gameEngine.addEntity(food);
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 20; i++) {
         food = new Food(gameEngine);
         gameEngine.addEntity(food);
 
