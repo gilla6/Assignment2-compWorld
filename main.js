@@ -1,3 +1,41 @@
+window.onload = function () {
+  var socket = io.connect("http://24.16.255.56:8888");
+  console.log("---socket----");
+
+  socket.on("load", function (data) {
+      console.log(data);
+  });
+
+  var text = document.getElementById("text");
+  var saveButton = document.getElementById("save");
+  var loadButton = document.getElementById("load");
+
+  saveButton.onclick = function () {
+    console.log("save");
+    text.innerHTML = "Saved."
+    var array = [map];
+    var playerArray = PlayerState.playerArray;
+    console.log(playerArray.length);
+
+    
+    socket.emit("save", { studentname: "Arshdeep", statename: "Emergence", data: "Goodbye World", playerArray: playerArray});
+  };
+
+  loadButton.onclick = function () {
+    console.log("load");
+    text.innerHTML = "Loaded."
+    socket.emit("load", { studentname: "Arshdeep", statename: "Emergence" });
+    socket.on("load", function(data){
+console.log("++++++"+data.playerArray.length);
+GameRestoreBoolean(data.playerArray);
+    });
+  };
+
+};
+
+
+
+
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
@@ -59,6 +97,8 @@ function Background(game, spritesheet) {
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
+    this.key = 99;
+    this.size = 99;
 };
 
 Background.prototype.draw = function () {
@@ -91,6 +131,7 @@ function Species(game) {
     this.size = 1.2;
     this.radius = 20;
     this.id = 1;
+    this.key = 1;
     Entity.call(this, game, 4 + (Math.random() * 750) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -125,13 +166,70 @@ Species.prototype.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
+var PlayerState = function(){
+    this.playerArray = [];
+}
+var PlayerState = new PlayerState();
+function GameRestoreBoolean(playerarray){
+    // gamerestore = false;
+    PlayerObject.PlayerArray = playerarray;
+    console.log("*******"+PlayerObject.PlayerArray[0][2]);
+    PlayerObject.playerBoolean = true;
 
+}
+
+var PlayerObject = {
+PlayerArray:'',
+playerBoolean:false
+};
 Species.prototype.update = function () {
+    //     if(PlayerObject.playerBoolean==true){
+    //         console.log("inside----");
+    //         this.game.entities = [];
+    //         this.game.entities.push(bg.bg);
+    //         for(var i=0; i<PlayerObject.PlayerArray.length; i++){
+                
+                
+                    
+    //                 if(PlayerObject.PlayerArray[i][2]==1){
+    //                     this.game.entities.push(bg.bg);
+    //                     console.log("--from main species--"+species.species.x);
+    //                 }else if(PlayerObject.PlayerArray[i][2]==2){
+    //                     this.game.entities.push(bg.bg);
+    //                 }else if(PlayerObject.PlayerArray[i][2]==3){
+    //                     this.game.entities.push(bg.bg);
+    //                 }else if(PlayerObject.PlayerArray[i][2]==4){
+    //                     this.game.entities.push(bg.bg);
+    //                 }else if(PlayerObject.PlayerArray[i][2]==5){
+    //                     this.game.entities.push(bg.bg);
+    //                 }else if(PlayerObject.PlayerArray[i][2]==6){
+    //                     this.game.entities.push(bg.bg);
+    //                 }
+    //                 this.game.entities.push(spec);
+    //                 this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+    //                 this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+    //                 console.log("---key 3---");
+                
+    //         }
+
+    //         PlayerObject.playerBoolean=false;
+
+    //     }
+
+
+
+    let lengthentities = this.game.entities.length;
+    PlayerState.playerArray = [];
+    for (var i=0; i<this.game.entities.length; i++){
+            PlayerState.playerArray.push([this.game.entities[i].x, this.game.entities[i].y, this.game.entities[i].key, this.game.entities[i].size]);
+    }
+
+    // console.log(lengthentities+"------"+PlayerState.playerArray.length+"-----"+PlayerState.playerArray.key);
      Entity.prototype.update.call(this);
 
     this.x += this.velocity.x * this.game.clockTick;
     this.y += this.velocity.y * this.game.clockTick;
-
+     
         if (this.collideLeft()){
             this.left = false;
            this.right = true;
@@ -192,10 +290,11 @@ Species.prototype.update = function () {
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
 
 
-  console.log(this.game.clockTick);
+  
    
 
 
+    map[this.key] = dimension(this.x,this.y, this.size);
 
     
     Entity.prototype.update.call(this);
@@ -224,6 +323,7 @@ function SpeciesTwo(game) {
     this.up = false;
     this.down = false;
      this.size = 1.2;
+     this.key = 2;
     this.jumping = false;
     this.radius = 20;
     this.id = 2;
@@ -343,10 +443,10 @@ SpeciesTwo.prototype.update = function () {
 
    
      
-  console.log(this.game.clockTick);
+
     
 
-
+    map[this.key] = dimension(this.x,this.y, this.size);
 
     
     Entity.prototype.update.call(this);
@@ -375,6 +475,7 @@ function SpeciesThree(game) {
     this.up = false;
     this.down = false;
      this.size = 1.2;
+     this.key = 3;
     this.radius = 20;
     this.id = 3;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
@@ -493,8 +594,8 @@ SpeciesThree.prototype.update = function () {
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
 
    
-  console.log(this.game.clockTick);
-    
+
+     map[this.key] = dimension(this.x,this.y, this.size);
 
 
     
@@ -525,6 +626,7 @@ function SpeciesFour(game) {
     this.down = false;
      this.size = 1.2;
     this.radius = 20;
+    this.key = 4;
     this.id = 4;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
@@ -641,10 +743,9 @@ SpeciesFour.prototype.update = function () {
     this.velocity.y -= (1 - friction) * this.game.clockTick * this.velocity.y;
 
    
-     
-  console.log(this.game.clockTick);
-    
 
+    
+     map[this.key] = dimension(this.x,this.y, this.size);
 
     
     Entity.prototype.update.call(this);
@@ -669,6 +770,8 @@ function Food(game) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/food.png"), 300, 150, 30, 16, 0.5, 1, true, false);
     this.radius = 10;
     this.id = 6;
+    this.key = 5;
+    this.size = 7;
     Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
@@ -721,9 +824,9 @@ Food.prototype.update = function () {
 
         };
     };
-  console.log(this.game.clockTick);
+  
    
-
+   map[this.key] = new dimension(this.x,this.y, 1.5);
 
     
     Entity.prototype.update.call(this);
@@ -742,12 +845,40 @@ var friction = 1;
 var acceleration = 10000;
 var maxSpeed = 2000;
 
+var map  = new Object();
+
+var dimension = function(x,y, size){
+    this.x = x;
+    this.y = y;
+    this.size = size;
+}
 var ASSET_MANAGER = new AssetManager();
 
 
 ASSET_MANAGER.queueDownload("./img/background.jpeg");
 ASSET_MANAGER.queueDownload("./img/species.png");
 ASSET_MANAGER.queueDownload("./img/food.png");
+var bg={
+bg:''
+};
+var species = {
+species:''
+};
+
+var species3 = {
+    species:''
+    };
+
+    var species4 = {
+        species:''
+        };
+
+        var species2 = {
+            species:''
+            };
+            var food = {
+                food:''
+                };
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("starting up da sheild");
@@ -758,10 +889,13 @@ ASSET_MANAGER.downloadAll(function () {
     
     gameEngine.init(ctx);
     var bg = new Background(gameEngine, ASSET_MANAGER.getAsset("./img/background.jpeg"));
+    bg.bg = bg;
       gameEngine.addEntity(bg);
    
    
     var spec = new Species(gameEngine);
+    species.species=spec;
+    console.log("((((((((---"+species.species.x);
     gameEngine.addEntity(spec);
 
     
@@ -772,6 +906,7 @@ ASSET_MANAGER.downloadAll(function () {
     };
  
      var spec3 = new SpeciesTwo(gameEngine);
+     species2 = spec3;
     gameEngine.addEntity(spec3);
     for (var i = 0; i < 15; i++) {
         spec3 = new SpeciesTwo(gameEngine);
@@ -779,6 +914,7 @@ ASSET_MANAGER.downloadAll(function () {
 
     };
      var spec4 = new SpeciesThree(gameEngine);
+     species3.species = spec4;
     gameEngine.addEntity(spec4);
     for (var i = 0; i < 15; i++) {
         spec4 = new SpeciesThree(gameEngine);
@@ -786,14 +922,16 @@ ASSET_MANAGER.downloadAll(function () {
 
     };
      var spec5 = new SpeciesFour(gameEngine);
+     species4.species = spec5;
     gameEngine.addEntity(spec5);
     for (var i = 0; i < 15; i++) {
         spec5 = new SpeciesFour(gameEngine);
         gameEngine.addEntity(spec5);
 
     };
-
+     
     var food = new Food(gameEngine);
+    food.food = food;
     gameEngine.addEntity(food);
     for (var i = 0; i < 20; i++) {
         food = new Food(gameEngine);
@@ -801,6 +939,7 @@ ASSET_MANAGER.downloadAll(function () {
 
     };
     
+
       gameEngine.start();
     
     
