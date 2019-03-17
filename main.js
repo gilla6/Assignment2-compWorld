@@ -90,27 +90,28 @@ Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
 }
 
-function Background(game, spritesheet) {
+function Background(game, spriteSheet) {
     this.x = 0;
     this.y = 0;
-    this.spritesheet = spritesheet;
+    this.spritesheet = spriteSheet;
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
     this.key = 99;
     this.size = 99;
-};
 
-Background.prototype.draw = function () {
+   
+this.draw = function () {
     this.ctx.drawImage(this.spritesheet,
                    this.x, this.y);
 };
 
-Background.prototype.update = function () {
+this.update = function () {
     this.x -= this.game.clockTick * this.speed;
     if (this.x < -500) this.x = 0;
-
-};
+    
+   
+};};
 function distance(a, b) {
     var difX = a.x - b.x;
     var difY = a.y - b.y;
@@ -132,7 +133,9 @@ function Species(game) {
     this.radius = 20;
     this.id = 1;
     this.key = 1;
-    Entity.call(this, game, 4 + (Math.random() * 750) + 1, 4 + (Math.random() * 680) + 1);
+    this.x =  4 + (Math.random() * 750) + 1;
+    this.y  =   4 + (Math.random() * 680) + 1;
+    Entity.call(this, game, this.x, this.y);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     
@@ -142,88 +145,88 @@ function Species(game) {
         this.velocity.y *= ratio;
     };
    
-}
+
 
 Species.prototype = new Entity();
 Species.prototype.constructor = Species;
 
 
-
-Species.prototype.collideRight = function () {
+this.collideRight = function () {
     return this.x + this.radius > 780;
 };
-Species.prototype.collideLeft = function () {
+this.collideLeft = function () {
     return this.x - this.radius < -10;
 };
-Species.prototype.collideBottom = function () {
+this.collideBottom = function () {
     return this.y + this.radius > 690;
 };
-Species.prototype.collideTop = function () {
+this.collideTop = function () {
     return this.y - this.radius < -10;
 };
 
-Species.prototype.collide = function (other) {
+this.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
-var PlayerState = function(){
-    this.playerArray = [];
-}
-var PlayerState = new PlayerState();
-function GameRestoreBoolean(playerarray){
-    // gamerestore = false;
-    PlayerObject.PlayerArray = playerarray;
-    console.log("*******"+PlayerObject.PlayerArray[0][2]);
-    PlayerObject.playerBoolean = true;
 
-}
+this.update = function () {
+        if(PlayerObject.playerBoolean==true){
+            console.log("inside----");
+            this.game.entities = [];
+           
+            for(var i=0; i<PlayerObject.PlayerArray.length; i++){
+                    if(PlayerObject.PlayerArray[i][2]==99){
+                         this.game.entities.push(new Background(this.game, ASSET_MANAGER.getAsset("./img/background.jpeg")));
+                          this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                          this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
 
-var PlayerObject = {
-PlayerArray:'',
-playerBoolean:false
-};
-Species.prototype.update = function () {
-    //     if(PlayerObject.playerBoolean==true){
-    //         console.log("inside----");
-    //         this.game.entities = [];
-    //         this.game.entities.push(bg.bg);
-    //         for(var i=0; i<PlayerObject.PlayerArray.length; i++){
-                
+                    }
                 
                     
-    //                 if(PlayerObject.PlayerArray[i][2]==1){
-    //                     this.game.entities.push(bg.bg);
-    //                     console.log("--from main species--"+species.species.x);
-    //                 }else if(PlayerObject.PlayerArray[i][2]==2){
-    //                     this.game.entities.push(bg.bg);
-    //                 }else if(PlayerObject.PlayerArray[i][2]==3){
-    //                     this.game.entities.push(bg.bg);
-    //                 }else if(PlayerObject.PlayerArray[i][2]==4){
-    //                     this.game.entities.push(bg.bg);
-    //                 }else if(PlayerObject.PlayerArray[i][2]==5){
-    //                     this.game.entities.push(bg.bg);
-    //                 }else if(PlayerObject.PlayerArray[i][2]==6){
-    //                     this.game.entities.push(bg.bg);
-    //                 }
-    //                 this.game.entities.push(spec);
-    //                 this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
-    //                 this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
-    //                 console.log("---key 3---");
+                    else if(PlayerObject.PlayerArray[i][2]==1){
+                        this.game.entities.push(new Species(this.game));
+                        this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                        this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+                        this.game.entities[this.game.entities.length-1].size = PlayerObject.PlayerArray[i][3];
+                        console.log("--from main species--"+species.species.x);
+                    }else if(PlayerObject.PlayerArray[i][2]==2){
+                        this.game.entities.push(new SpeciesTwo(this.game));
+                        this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                        this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+                        this.game.entities[this.game.entities.length-1].size = PlayerObject.PlayerArray[i][3];
+                    }else if(PlayerObject.PlayerArray[i][2]==3){
+                        this.game.entities.push(new SpeciesThree(this.game));
+                        this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                        this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+                        this.game.entities[this.game.entities.length-1].size = PlayerObject.PlayerArray[i][3];
+                    }else if(PlayerObject.PlayerArray[i][2]==4){
+                        this.game.entities.push(new SpeciesFour(this.game));
+                        this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                        this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+                        this.game.entities[this.game.entities.length-1].size = PlayerObject.PlayerArray[i][3];
+                    }else if(PlayerObject.PlayerArray[i][2]==5){
+                        this.game.entities.push(new Food(this.game));
+                        this.game.entities[this.game.entities.length-1].x = PlayerObject.PlayerArray[i][0];
+                        this.game.entities[this.game.entities.length-1].y = PlayerObject.PlayerArray[i][1];
+                        this.game.entities[this.game.entities.length-1].size = PlayerObject.PlayerArray[i][3];
+                    }
+                    
+                    console.log("---key 3---");
                 
-    //         }
+            }
+            
+            PlayerObject.playerBoolean=false;
 
-    //         PlayerObject.playerBoolean=false;
-
-    //     }
+        }
 
 
-
+    if(this.game.entities.length != 0){
     let lengthentities = this.game.entities.length;
     PlayerState.playerArray = [];
     for (var i=0; i<this.game.entities.length; i++){
             PlayerState.playerArray.push([this.game.entities[i].x, this.game.entities[i].y, this.game.entities[i].key, this.game.entities[i].size]);
     }
-
+}
     // console.log(lengthentities+"------"+PlayerState.playerArray.length+"-----"+PlayerState.playerArray.key);
      Entity.prototype.update.call(this);
 
@@ -300,7 +303,7 @@ Species.prototype.update = function () {
     Entity.prototype.update.call(this);
 }
 
-Species.prototype.draw = function (ctx) {
+this.draw = function (ctx) {
     if (this.left) {
         this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
@@ -312,6 +315,23 @@ Species.prototype.draw = function (ctx) {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
+}; };
+
+var PlayerState = function(){
+    this.playerArray = [];
+}
+var PlayerState = new PlayerState();
+function GameRestoreBoolean(playerarray){
+    // gamerestore = false;
+    PlayerObject.PlayerArray = playerarray;
+    console.log("*******"+PlayerObject.PlayerArray[0][2]);
+    PlayerObject.playerBoolean = true;
+
+}
+
+var PlayerObject = {
+PlayerArray:'',
+playerBoolean:false
 };
 
 function SpeciesTwo(game) {
@@ -327,7 +347,9 @@ function SpeciesTwo(game) {
     this.jumping = false;
     this.radius = 20;
     this.id = 2;
-    Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
+    this.x = 4 + (Math.random() * 780) + 1;
+    this.y =   4 + (Math.random() * 680) + 1 ;
+    Entity.call(this, game, this.x,this.y);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     
@@ -337,32 +359,31 @@ function SpeciesTwo(game) {
         this.velocity.y *= ratio;
     };
    
-}
+
 
 SpeciesTwo.prototype = new Entity();
 Species.prototype.constructor = Species;
 
 
 
-SpeciesTwo.prototype.collideRight = function () {
+this.collideRight = function () {
     return this.x + this.radius > 780;
 };
-SpeciesTwo.prototype.collideLeft = function () {
+this.collideLeft = function () {
     return this.x - this.radius < -10;
 };
-SpeciesTwo.prototype.collideBottom = function () {
+this.collideBottom = function () {
     return this.y + this.radius > 690;
 };
-SpeciesTwo.prototype.collideTop = function () {
+this.collideTop = function () {
     return this.y - this.radius < -10;
 };
 
-SpeciesTwo.prototype.collide = function (other) {
+this.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
-
-SpeciesTwo.prototype.update = function () {
+this.update = function () {
      Entity.prototype.update.call(this);
 
     this.x += this.velocity.x * this.game.clockTick;
@@ -452,7 +473,7 @@ SpeciesTwo.prototype.update = function () {
     Entity.prototype.update.call(this);
 }
 
-SpeciesTwo.prototype.draw = function (ctx) {
+this.draw = function (ctx) {
      if (this.left) {
         this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
@@ -464,6 +485,7 @@ SpeciesTwo.prototype.draw = function (ctx) {
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }
     Entity.prototype.draw.call(this);
+};
 };
 
 function SpeciesThree(game) {
@@ -478,7 +500,9 @@ function SpeciesThree(game) {
      this.key = 3;
     this.radius = 20;
     this.id = 3;
-    Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
+    this.x =  4 + (Math.random() * 780) + 1 ;
+    this.y   =   4 + (Math.random() * 680) + 1 ;
+    Entity.call(this, game, this.x, this.y);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     
@@ -488,32 +512,32 @@ function SpeciesThree(game) {
         this.velocity.y *= ratio;
     };
    
-}
+
 
 SpeciesThree.prototype = new Entity();
 SpeciesThree.prototype.constructor = Species;
 
 
 
-SpeciesThree.prototype.collideRight = function () {
+this.collideRight = function () {
     return this.x + this.radius > 780;
 };
-SpeciesThree.prototype.collideLeft = function () {
+this.collideLeft = function () {
     return this.x - this.radius < -10;
 };
-SpeciesThree.prototype.collideBottom = function () {
+this.collideBottom = function () {
     return this.y + this.radius > 690;
 };
-SpeciesThree.prototype.collideTop = function () {
+this.collideTop = function () {
     return this.y - this.radius < -10;
 };
 
-SpeciesThree.prototype.collide = function (other) {
+this.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
 
-SpeciesThree.prototype.update = function () {
+this.update = function () {
      Entity.prototype.update.call(this);
 
     this.x += this.velocity.x * this.game.clockTick;
@@ -602,7 +626,7 @@ SpeciesThree.prototype.update = function () {
     Entity.prototype.update.call(this);
 }
 
-SpeciesThree.prototype.draw = function (ctx) {
+this.draw = function (ctx) {
      if (this.left) {
         this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
@@ -615,7 +639,7 @@ SpeciesThree.prototype.draw = function (ctx) {
     }
     Entity.prototype.draw.call(this);
 };
-
+};
 function SpeciesFour(game) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 140, 200, 45, 45, 0.25, 3, true, false);
     this.leftAnimation = new Animation(ASSET_MANAGER.getAsset("./img/species.png"), 140, 250, 45, 45, 0.25, 3, true, false);
@@ -628,7 +652,9 @@ function SpeciesFour(game) {
     this.radius = 20;
     this.key = 4;
     this.id = 4;
-    Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
+    this.x  =  4 + (Math.random() * 780) + 1 ;
+    this.y  =  4 + (Math.random() * 680) + 1;
+    Entity.call(this, game, this.x, this.y);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     
@@ -638,32 +664,32 @@ function SpeciesFour(game) {
         this.velocity.y *= ratio;
     };
    
-}
+
 
 SpeciesFour.prototype = new Entity();
 Species.prototype.constructor = Species;
 
 
 
-SpeciesFour.prototype.collideRight = function () {
+this.collideRight = function () {
     return this.x + this.radius > 780;
 };
-SpeciesFour.prototype.collideLeft = function () {
+this.collideLeft = function () {
     return this.x - this.radius < -10;
 };
-SpeciesFour.prototype.collideBottom = function () {
+this.collideBottom = function () {
     return this.y + this.radius > 690;
 };
-SpeciesFour.prototype.collideTop = function () {
+this.collideTop = function () {
     return this.y - this.radius < -10;
 };
 
-SpeciesFour.prototype.collide = function (other) {
+this.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
 
-SpeciesFour.prototype.update = function () {
+this.update = function () {
      Entity.prototype.update.call(this);
 
     this.x += this.velocity.x * this.game.clockTick;
@@ -751,7 +777,7 @@ SpeciesFour.prototype.update = function () {
     Entity.prototype.update.call(this);
 }
 
-SpeciesFour.prototype.draw = function (ctx) {
+this.draw = function (ctx) {
      if (this.left) {
         this.leftAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y,this.size);
     }else if(this.right){
@@ -764,7 +790,7 @@ SpeciesFour.prototype.draw = function (ctx) {
     }
     Entity.prototype.draw.call(this);
 };
-
+};
 
 function Food(game) {
     this.animation = new Animation(ASSET_MANAGER.getAsset("./img/food.png"), 300, 150, 30, 16, 0.5, 1, true, false);
@@ -772,7 +798,9 @@ function Food(game) {
     this.id = 6;
     this.key = 5;
     this.size = 7;
-    Entity.call(this, game, 4 + (Math.random() * 780) + 1, 4 + (Math.random() * 680) + 1);
+    this.x = 4 + (Math.random() * 780) + 1;
+    this.y = 4 + (Math.random() * 680) + 1;
+    Entity.call(this, game, this.x, this.y);
     this.velocity = { x: Math.random() * 100, y: Math.random() * 100 };
     var speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
     
@@ -782,33 +810,33 @@ function Food(game) {
         this.velocity.y *= ratio;
     };
    
-}
+
 
 Food.prototype = new Entity();
 Food.prototype.constructor = Species;
 
 
 
-Food.prototype.collideRight = function () {
+this.collideRight = function () {
     return this.x + this.radius >780;
 };
-Food.prototype.collideLeft = function () {
+this.collideLeft = function () {
     return this.x - this.radius < 0;
 };
-Food.prototype.collideBottom = function () {
+this.collideBottom = function () {
     return this.y + this.radius > 690;
 };
-Food.prototype.collideTop = function () {
+this.collideTop = function () {
     return this.y - this.radius < 0;
 };
 
-Food.prototype.collide = function (other) {
+this.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
 };
 
 
-Food.prototype.update = function () {
-     Entity.prototype.update.call(this);
+this.update = function () {
+     //Entity.prototype.update.call(this);
 
 
 
@@ -826,20 +854,20 @@ Food.prototype.update = function () {
     };
   
    
-   map[this.key] = new dimension(this.x,this.y, 1.5);
+  /// map[this.key] = new dimension(this.x,this.y, 1.5);
 
     
     Entity.prototype.update.call(this);
 }
 
-Food.prototype.draw = function (ctx) {
+this.draw = function (ctx) {
     
         this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y,1.5);
   
     Entity.prototype.draw.call(this);
 };
 
-
+};
 // the "main" code begins here
 var friction = 1;
 var acceleration = 10000;
@@ -867,14 +895,14 @@ species:''
 
 var species3 = {
     species:''
-    };
+};
 
-    var species4 = {
+var species4 = {
         species:''
-        };
+};
 
-        var species2 = {
-            species:''
+var species2 = {
+        species:''
             };
             var food = {
                 food:''
@@ -906,7 +934,7 @@ ASSET_MANAGER.downloadAll(function () {
     };
  
      var spec3 = new SpeciesTwo(gameEngine);
-     species2 = spec3;
+     species2.species = spec3;
     gameEngine.addEntity(spec3);
     for (var i = 0; i < 15; i++) {
         spec3 = new SpeciesTwo(gameEngine);
